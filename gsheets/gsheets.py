@@ -264,10 +264,13 @@ class SheetPushInterface(BaseSheetInterface):
         # order the field indexes by their col index
         sorted_field_indexes = sorted(field_indexes, key=lambda x: x[1])
 
+        # format row data before it's sent to google sheets
+        formatted_data = getattr(self.model_cls, 'format_row_data')(data) if hasattr(self.model_cls, 'format_row_data') else data
+
         row_data = []
         for field, ix in sorted_field_indexes:
             logger.debug(f'writing data in field {field} to col ix {ix}')
-            row_data.append(data[field])
+            row_data.append(formatted_data[field])
 
         # get the row to update if it exists, otherwise we will add a new row
         existing_row_ix = self.existing_row(**data)
@@ -343,11 +346,12 @@ class SheetPullInterface(BaseSheetInterface):
 
         copy_of_cleaned_data = cleaned_data.copy()
         for i , j in copy_of_cleaned_data.items():
-            if j.lower() == 'false':
-                cleaned_data[i] = 'False'
-                continue
-            if j.lower() == 'true':
-                cleaned_data[i] = 'True'
+            if type(j) is str:
+                if j.lower() == 'false':
+                    cleaned_data[i] = 'False'
+                    continue
+                if j.lower() == 'true':
+                    cleaned_data[i] = 'True'
         try:
             row_id = data[self.sheet_id_field]
 
