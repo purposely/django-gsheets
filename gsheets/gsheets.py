@@ -362,6 +362,8 @@ class SheetPullInterface(BaseSheetInterface):
         except (KeyError, ObjectDoesNotExist, ValueError):
             logger.debug(f'creating new model instance')
             # if there's no ID field in the row or the ID doesnt exist
+            if data.get(self.sheet_id_field, None):
+                cleaned_data[self.model_id_field] = data[self.sheet_id_field]
             instance, created = self.model_cls.objects.create(**cleaned_data), True
 
         if not created:
