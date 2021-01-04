@@ -8,7 +8,6 @@ from .models import AccessCredentials
 from .auth import get_oauth_cb_url, ensure_https
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
-import googleapiclient.discovery
 import logging
 import json
 import re

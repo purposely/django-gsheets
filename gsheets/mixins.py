@@ -1,4 +1,3 @@
-from googleapiclient.discovery import build
 from django.core.exceptions import ObjectDoesNotExist
 from .auth import get_gapi_credentials
 from .gsheets import SheetPullInterface, SheetPushInterface, SheetSync

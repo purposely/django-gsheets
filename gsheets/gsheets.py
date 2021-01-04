@@ -64,7 +64,7 @@ class BaseSheetInterface(object):
         if self._api is not None:
             return self._api
 
-        self._api = build('sheets', 'v4', credentials=self.credentials)
+        self._api = build('sheets', 'v4', credentials=self.credentials, cache_discovery=False)
         return self._api
 
     @property
