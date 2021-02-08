@@ -1,6 +1,7 @@
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from .auth import get_gapi_credentials
 from .signals import sheet_row_processed
 from . import decorators
@@ -290,6 +291,7 @@ class SheetPullInterface(BaseSheetInterface):
         super(SheetPullInterface, self).__init__(*args, **kwargs)
         self.pull_fields = kwargs.pop('pull_fields', 'all')
 
+    @transaction.atomic()
     def pull_sheet(self):
         sheet_fields = self.pull_fields
         rows_start, rows_end = self.sheet_range_rows
